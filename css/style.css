@@ -1,0 +1,81 @@
+body{
+    font-family: 'Roboto', sans-serif;
+}
+.card-title{
+    width: 100%;
+    background: rgba(000,000,000,0.5);
+}
+
+.fav{
+  position: absolute;
+  left: 5px;
+  top: 5px;
+}
+
+.rate{
+  position: absolute;
+  right: 5px;
+  top: 5px;
+}
+
+
+/*rating start from here*/
+.star{
+  color: goldenrod;
+  font-size: 1.2rem;
+  padding: 0 0.8rem; /* space out the stars */
+}
+.star::before{
+  content: '\2606';    /* star outline */
+  cursor: pointer;
+}
+.star.rated::before{
+  /* the style for a selected star */
+  content: '\2605';  /* filled star */
+}
+
+.stars{
+    counter-reset: rateme 0;   
+    font-size: 0.8rem;
+    font-weight: 900;
+}
+.star.rated{
+    counter-increment: rateme 1;
+}
+.stars::after{
+    content: counter(rateme) '/5';
+}
+
+@media screen and (min-width: 768px) {
+  body {
+    /* background-color: aquamarine; */
+  } 
+
+  .card-image{
+    height: 500px;    
+  } 
+
+  img{
+    height: 100%;
+  }
+
+}
+
+@media screen and (min-width: 1024px) {
+  body {
+    /* background-color: maroon; */
+  } 
+
+  .detail-img{   
+    height:100%;   
+  } 
+
+  .list-content{
+    height: 132px;    
+  } 
+
+  img {
+    height: 100%;
+  }
+
+}

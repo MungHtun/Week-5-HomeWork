@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Movie Trailer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+  <header>
+    <nav class="indigo">
+      <div class="nav-wrapper">
+        <ul class="left hide-on-med-and-down">
+          <li><a href="#" id="home">Home</a></li>
+          <li style="display:none;"><a href="#" id="movie-name">Movie Name</a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+  <div class="container-fluid">
+    <div class="row" id="viewport">
+    </div>
+  </div>
+  <footer class="page-footer indigo">
+    <div class="footer-copyright">
+      <div class="container">
+        Copyright © 2019 PADC. All rights reserved.
+      </div>
+    </div>
+  </footer>
+  <template id="movie-info-template">
+    <div class="col s12 m4 l3 container">
+      <div class="card">
+        <div class="card-image">
+          <img src="{{this.poster}}">
+          <a href="#" class="mark-favorite-button btn-floating red fav" id="parent{{this.parentFavid}}">
+            <!-- hello -->
+            <i class="material-icons" id="child{{this.childFavid}}">{{this.favorite}}</i>
+          </a>
+          <!-- <a href="#" class="btn-floating red rate" id="star">
+              <i class="material-icons" id="rateStar">star_border</i>
+          </a> -->
+          <span class="card-title">{{this.title}}</span>
+          <a class="detail-view-button btn-floating halfway-fab waves-effect waves-light red" href="#"
+            data-id={{this.id}}>
+            <i class="material-icons">add</i>
+          </a>
+        </div>
+        <div class="card-content list-content">
+            <div class="stars" data-rating="3" id="parentRating{{this.parentRateid}}">
+                <span class="star" id="{{this.childRateid}}_1" >&nbsp;</span>
+                <span class="star" id="{{this.childRateid}}_2" >&nbsp;</span>
+                <span class="star" id="{{this.childRateid}}_3" >&nbsp;</span>
+                <span class="star" id="{{this.childRateid}}_4" >&nbsp;</span>
+                <span class="star" id="{{this.childRateid}}_5" >&nbsp;</span>
+              </div>
+          <p>{{this.overview}}</p>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <template id="movie-detail-template">
+    <!-- <div class="col s6 offset-s3"> -->
+    <div class="col s12 container-detail">
+      <div class="card">
+        <div class="card-image detail-img">
+          <img src="{{this.poster}}">
+          <span class="card-title">{{this.title}}</span>
+          <a class="list-view-button btn-floating halfway-fab waves-effect waves-light red" href="#">
+            <i class="material-icons">arrow_back</i>
+          </a>
+        </div>
+        <div class="card-content">
+          <p>{{this.overview}}</p>
+          {{this.videos}}
+        </div>
+      </div>
+    </div>
+  </template>
+
+
+  <template id="youtube-video-template">
+    <!-- <div> 560, 315-->
+    <iframe width="100%" height="315" src="https://www.youtube.com/embed/{{id}}"
+      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <!-- </div> -->
+
+  </template>
+
+  <script src="js/app.js" type="module"></script>
+</body>
+
+</html>
