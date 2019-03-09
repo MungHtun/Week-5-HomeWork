@@ -4,99 +4,102 @@ class MovieListView {
         this.itemTemplate = document.getElementById("movie-info-template").innerHTML;
         this.viewport = document.getElementById("viewport");
         this.viewport.addEventListener('click', (event) => this.detailViewBtnListener(event));
-        this.viewport.addEventListener('click', (event) => this.favoriteBtnListener(event));          
+        this.viewport.addEventListener('click', (event) => this.favoriteBtnListener(event));
         this.viewport.addEventListener('click', (event) => this.ratingListener(event));
 
-      this.ratingData = [];
-       
+        this.ratingData = [];
+
     }
 
-    ratingListener(event){       
+    ratingListener(event) {
 
         let span = event.target;
 
-        let parent = span.parentNode;
-        let parentId = parent.id.slice(12);
+        if (span && span.parentNode.classList.contains('rating-star')) {
 
-        //console.log(parentId);
+            let parent = span.parentNode;
+            let parentId = parent.id.slice(12);
 
-        let movieId = span.id;
-        let childId = movieId.slice(0, 6);
+            //console.log(parentId);
+
+            let movieId = span.id;
+            let childId = movieId.slice(0, 6);
 
 
-        if(parentId === childId){
-            var stars = parent.children;    
-         
-        }
-        
-        let match = false;
-        let num = 0;  
+            if (parentId === childId) {
+                var stars = parent.children;
 
-        [].forEach.call(stars, function(star, index){
-            if(match){
-                star.classList.remove('rated');
-            }else{
-                star.classList.add('rated');
-            }
-          
-            if(star === span){
-                match = true;
-                num = index + 1;
             }
 
-        });
+            let match = false;
+            let num = 0;
 
-        document.querySelector('.stars').setAttribute('data-rating', num);
+            [].forEach.call(stars, function (star, index) {
+                if (match) {
+                    star.classList.remove('rated');
+                } else {
+                    star.classList.add('rated');
+                }
 
-        const ratings = {id: childId, number: num}      
+                if (star === span) {
+                    match = true;
+                    num = index + 1;
+                }
 
-        let inputRating = [];
+            });
 
-        inputRating = JSON.parse(localStorage.getItem('rating') || "[]");
+            document.querySelector('.stars').setAttribute('data-rating', num);
 
-        if (inputRating.length === 0) {
+            const ratings = { id: childId, number: num }
 
-            if(ratings.id != ""){
-                inputRating.push(ratings);
-                localStorage.setItem('rating', JSON.stringify(inputRating));
-            }else{
-                return;
-            }
-           
+            let inputRating = [];
 
-        } else {
-          
-            for (let item of inputRating) {
+            inputRating = JSON.parse(localStorage.getItem('rating') || "[]");
 
+            if (inputRating.length === 0) {
 
-                var id = inputRating.length + 1;
-                var found = inputRating.some(function (el) {
-                  return el.id === childId;
-                });
-
-                if (!found && childId != "") {
+                if (ratings.id != "") {
                     inputRating.push(ratings);
                     localStorage.setItem('rating', JSON.stringify(inputRating));
-                   //console.log(inputRating);
-                }else if(found && childId != ""){                  
-                   
-                    inputRating.find(item => item.id == childId).number = ratings.number;                   
-                    localStorage.setItem('rating', JSON.stringify(inputRating));
-                }else{
+                } else {
                     return;
                 }
-               
+
+
+            } else {
+
+                for (let item of inputRating) {
+
+
+                    var id = inputRating.length + 1;
+                    var found = inputRating.some(function (el) {
+                        return el.id === childId;
+                    });
+
+                    if (!found && childId != "") {
+                        inputRating.push(ratings);
+                        localStorage.setItem('rating', JSON.stringify(inputRating));
+                        //console.log(inputRating);
+                    } else if (found && childId != "") {
+
+                        inputRating.find(item => item.id == childId).number = ratings.number;
+                        localStorage.setItem('rating', JSON.stringify(inputRating));
+                    } else {
+                        return;
+                    }
+
+                }
+
+
             }
-            
+
+            this.ratingData.push(ratings);
+
+            console.log(this.ratingData);
 
         }
 
-        this.ratingData.push(ratings);
-
-        console.log(this.ratingData);       
-
-
-    }   
+    }
 
     favoriteBtnListener(event) {
         event.preventDefault();
@@ -135,32 +138,32 @@ class MovieListView {
                 let temp = false;
                 for (let item of inputFav) {
 
-                    if (parseInt(item) != childId) {                       
+                    if (parseInt(item) != childId) {
 
                         var index = inputFav.indexOf(childId);
                         if (index > -1) {
-                          temp = false;
-                        }  else{
+                            temp = false;
+                        } else {
                             temp = true;
                         }
 
-                        
-                    }
-                    else if(parseInt(item) == childId){     
 
-                        if(!temp){
+                    }
+                    else if (parseInt(item) == childId) {
+
+                        if (!temp) {
                             var index = inputFav.indexOf(childId);
                             if (index > -1) {
-                                inputFav.splice(index, 1);                      
-                               localStorage.setItem('favorite', JSON.stringify(inputFav));
-                              }   
-                       }else{
-                           return;
-                       }                       
+                                inputFav.splice(index, 1);
+                                localStorage.setItem('favorite', JSON.stringify(inputFav));
+                            }
+                        } else {
+                            return;
+                        }
 
                     }
 
-                    if(temp){                       
+                    if (temp) {
 
                         inputFav.push(childId);
                         localStorage.setItem('favorite', JSON.stringify(inputFav));
@@ -168,7 +171,7 @@ class MovieListView {
                     }
                 }
 
-                
+
 
             }
 
@@ -190,6 +193,9 @@ class MovieListView {
 
     getItemTemplate(object) {
 
+
+        let result = "";
+
         if (object.favorite) {
             object.favorite = "favorite";
         } else {
@@ -197,15 +203,41 @@ class MovieListView {
         }
 
 
-        // if(object.rating){
-        //     object.rating = "star";
-        // } else {
-        //     object.rating = "star_border";
-        // }
+        if (object.rating) {
+
+            if (object.rating == 1) {
+                var result1 = 'rated';
+            } else if (object.rating == 2) {
+                var result1 = 'rated';
+                var result2 = 'rated';
+
+            } else if (object.rating == 3) {
+                var result1 = 'rated';
+                var result2 = 'rated';
+                var result3 = 'rated';
+            } else if (object.rating == 4) {
+                var result1 = 'rated';
+                var result2 = 'rated';
+                var result3 = 'rated';
+                var result4 = 'rated';
+            } else if (object.rating == 5) {
+                var result1 = 'rated';
+                var result2 = 'rated';
+                var result3 = 'rated';
+                var result4 = 'rated';
+                var result5 = 'rated';
+            }
+        }
+
+
+
+
+
+
 
         //for(let rate in )
 
-        const result = this.itemTemplate
+        result = this.itemTemplate
             .replace("{{this.title}}", object.title)
             .replace("{{this.poster}}", `https://image.tmdb.org/t/p/w400/${object.poster}`)
             .replace("{{this.overview}}", this.getExcerptWords(object.overview))
@@ -213,12 +245,23 @@ class MovieListView {
             .replace("{{this.parentFavid}}", object.id)
             .replace("{{this.childFavid}}", object.id)
             .replace("{{this.parentRateid}}", object.id)
-            .replace("{{this.childRateid}}", object.id)
-            .replace("{{this.childRateid}}", object.id)
-            .replace("{{this.childRateid}}", object.id)
-            .replace("{{this.childRateid}}", object.id)
-            .replace("{{this.childRateid}}", object.id)            
-            .replace("{{this.favorite}}", object.favorite);         
+            .replace("{{this.childRateid}}_1", object.id)
+            .replace("{{this.childRateid}}_2", object.id)
+            .replace("{{this.childRateid}}_3", object.id)
+            .replace("{{this.childRateid}}_4", object.id)
+            .replace("{{this.childRateid}}_5", object.id)   
+            
+            .replace("{{this.rated_1}}", result1)   
+            .replace("{{this.rated_2}}", result2)   
+            .replace("{{this.rated_3}}", result3)   
+            .replace("{{this.rated_4}}", result4)   
+            .replace("{{this.rated_5}}", result5)   
+            
+
+
+            .replace("{{this.favorite}}", object.favorite);
+
+
 
         return result;
     }
